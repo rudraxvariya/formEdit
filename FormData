@@ -1,0 +1,97 @@
+import React from 'react';
+
+const FormBlock = () => {
+  const [userData, setUserData] = React.useState([]);
+  const [userName, setUserName] = React.useState('');
+  const [usersName, setUsersName] = React.useState('');
+  const [userPwd, setUserPwd] = React.useState('');
+  const [usersPwd, setUsersPwd] = React.useState('');
+  const [disable, setDisable] = React.useState(true);
+
+  const handleFormSubmit = e => {
+    e.preventDefault();
+    setUserData([...userData, { name: userName, password: userPwd }]);
+  };
+  const handleEdi = () => {
+    setDisable(!disable);
+    setUserName('');
+    setUserPwd('');
+  };
+  const handleEdit = items => {
+    const numb = userData.findIndex(item => {
+      return item === items;
+    });
+    const newArr = [...userData];
+    newArr[numb] = { name: usersName, password: usersPwd };
+    setUserData(newArr);
+  };
+  return (
+    <>
+      <form onSubmit={handleFormSubmit}>
+        <input
+          type="text"
+          value={userName}
+          onChange={e => {
+            setUserName(e.target.value);
+          }}
+          placeholder="Enter Name here"
+        />
+        <input
+          type="password"
+          value={userPwd}
+          onChange={e => {
+            setUserPwd(e.target.value);
+          }}
+          placeholder="Enter Password here"
+        />
+        <input type="submit" />
+      </form>
+      <div className="mt-5">
+        <table>
+          {userData &&
+            userData?.map((item, i) => (
+              <tr>
+                <td>
+                  <h1>{item.name}</h1>
+                  {!disable && (
+                    <input
+                      disabled={disable}
+                      onChange={e => {
+                        setUsersName(e.target.value);
+                      }}
+                    />
+                  )}
+                </td>
+                <td>
+                  <h1>{item.password}</h1>
+                  {!disable && (
+                    <input
+                      disabled={disable}
+                      onChange={e => {
+                        setUsersPwd(e.target.value);
+                      }}
+                    />
+                  )}
+                </td>
+                <td>
+                  <button onClick={handleEdi}>Edit</button>
+                </td>
+                <td>
+                  <button
+                    disabled={disable}
+                    onClick={() => {
+                      handleEdit(item);
+                    }}
+                  >
+                    Submit
+                  </button>
+                </td>
+              </tr>
+            ))}
+        </table>
+      </div>
+    </>
+  );
+};
+
+export default FormBlock;
